@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  python-backend:
+      build:
+        context: \\wsl.localhost\Ubuntu\home\carlos\TFG\ataque
+      volumes:
+        - "\\\\wsl.localhost\\Ubuntu\\home\\carlos\\TFG\\ataque:/app"
+      environment:
+        - ENV=dev
+      networks:
+        - app-network
+      ports:          
+        - "5001:5000" 
+        
+  dotnet-backend:
+      build:
+        context: ../dotnet/BlutTruck - copia - copia
+        dockerfile: Dockerfile
+      ports:
+         - "9000:3000"
+      volumes:
+        - ../dotnet/BlutTruck - copia - copia:/src
+      environment:
+        - ASPNETCORE_ENVIRONMENT=Development
+      networks:
+        - app-network
+
+  vue-frontend:
+      build:
+        context: ../Front/sakai-vue-master
+        dockerfile: Dockerfile
+      ports:
+        - "3001:5173"
+      volumes:
+        - ../Front/sakai-vue-master:/app 
+        - /app/node_modules             
+      environment:
+        - NODE_ENV=development
+        - VITE_API_BASE_URL=http://dotnet-backend:3000
+      depends_on:
+        - python-backend
+        - dotnet-backend
+      networks:
+        - app-network
+
+
+networks:
+  app-network:
+    driver: bridge
