@@ -11,7 +11,7 @@
         "@primevue/themes": "^4.2.4",
         "axios": "^1.8.3",
         "big-integer": "^1.6.52",
-        "chart.js": "3.3.2",
+        "chart.js": "4.5.1",
         "crypto-js": "^4.2.0",
         "firebase": "^11.6.0",
         "flatpickr": "^4.6.13",
