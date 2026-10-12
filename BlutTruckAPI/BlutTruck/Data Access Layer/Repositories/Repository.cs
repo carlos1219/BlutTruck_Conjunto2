@@ -35,7 +35,8 @@ namespace BlutTruck.Data_Access_Layer.Repositories
 
     public class HealthDataRepository : IHealthDataRepository
     {
-        private const string API_KEY = "AIzaSyB03cPKHoZJ05WaIT_D-Vsmsy7bkzH4zIc"; // Tu API_KEY
+        private static readonly string API_KEY = Environment.GetEnvironmentVariable("FIREBASE_API_KEY")
+            ?? throw new InvalidOperationException("Falta la variable de entorno FIREBASE_API_KEY");
         private const string AUTH_DOMAIN = "proyectocsharp-tfg.firebaseapp.com";  // Tu dominio de Firebase
         private readonly IOptions<ApiSettings> _apiSettings;
         private readonly string _databaseUrl = "https://proyectocsharp-tfg-default-rtdb.europe-west1.firebasedatabase.app/";
@@ -2163,17 +2164,7 @@ namespace BlutTruck.Data_Access_Layer.Repositories
             var response = new DeleteUserOutputDTO();
             try
             {
-                // --- Inicialización del Firebase Admin SDK (si no está ya inicializado globalmente) ---
-                string baseDir = AppDomain.CurrentDomain.BaseDirectory;
-                // Crea la ruta a la credencial DENTRO de la carpeta del programa
-                string rutajson = Path.Combine(baseDir, "Recursos", "proyectocsharp-tfg-firebase-adminsdk-fbsvc-a393e8de19.json"); // Asegúrate que el nombre/ruta es correcto
-                if (FirebaseApp.DefaultInstance == null)
-                {
-                    FirebaseApp.Create(new AppOptions()
-                    {
-                        Credential = GoogleCredential.FromFile(rutajson),
-                    });
-                }
+                // El Firebase Admin SDK se inicializa una sola vez en Program.cs (credenciales por variable de entorno).
                 var firebaseClient = new FirebaseClient(
                     _databaseUrl,
                     new FirebaseOptions { AuthTokenAsyncFactory = () => Task.FromResult(request.Token) }
