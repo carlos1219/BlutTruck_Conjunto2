@@ -18,5 +18,8 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 COPY --from=build /app/publish .
 
+# Usuario sin privilegios incluido en la imagen aspnet 8
+USER app
+
 EXPOSE 3000
 ENTRYPOINT ["dotnet", "BlutTruck.dll"]

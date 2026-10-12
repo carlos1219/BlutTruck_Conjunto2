@@ -15,5 +15,9 @@ COPY . .
 #    si tu script es solo procesamiento por CLI, no necesitas EXPOSE ni CMD de servicio web
 EXPOSE 5000
 
-# 6) Comando por defecto
+# 6) Ejecutar sin privilegios de root
+RUN useradd --create-home --uid 10001 appuser
+USER appuser
+
+# 7) Comando por defecto
 CMD ["python", "ataque.py"]

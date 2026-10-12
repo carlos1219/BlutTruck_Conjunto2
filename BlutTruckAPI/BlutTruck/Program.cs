@@ -75,14 +75,19 @@ builder.Services.AddCors(options =>
 
 
 // **6. Firebase Initialization**
-string baseDir = AppDomain.CurrentDomain.BaseDirectory;
-string rutajson = Path.Combine(baseDir, "Recursos", "proyectocsharp-tfg-firebase-adminsdk-fbsvc-a393e8de19.json"); // Asegúrate que el nombre/ruta es correcto
+// Credenciales de Firebase: nunca se versionan. Se leen de variables de entorno:
+//   FIREBASE_CREDENTIALS_JSON  -> contenido del JSON de la cuenta de servicio
+//   FIREBASE_CREDENTIALS_PATH  -> ruta a un fichero montado (p. ej. como secret de Docker)
 if (FirebaseApp.DefaultInstance == null)
 {
-    FirebaseApp.Create(new AppOptions()
-    {
-        Credential = GoogleCredential.FromFile(rutajson),
-    });
+    var credJson = Environment.GetEnvironmentVariable("FIREBASE_CREDENTIALS_JSON");
+    var credPath = Environment.GetEnvironmentVariable("FIREBASE_CREDENTIALS_PATH");
+    GoogleCredential credential = !string.IsNullOrWhiteSpace(credJson)
+        ? GoogleCredential.FromJson(credJson)
+        : !string.IsNullOrWhiteSpace(credPath)
+            ? GoogleCredential.FromFile(credPath)
+            : throw new InvalidOperationException("Define FIREBASE_CREDENTIALS_JSON o FIREBASE_CREDENTIALS_PATH");
+    FirebaseApp.Create(new AppOptions { Credential = credential });
 }
 // **7. Build the application**
 var app = builder.Build();

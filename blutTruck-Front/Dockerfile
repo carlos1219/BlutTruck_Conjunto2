@@ -16,6 +16,10 @@ RUN npm install
 # y potencialmente usar sin el volumen)
 COPY . .
 
+# Ejecutar sin privilegios de root (usuario "node" de la imagen)
+RUN chown -R node:node /app
+USER node
+
 # Exponer el puerto por defecto de Vite
 EXPOSE 5173
 

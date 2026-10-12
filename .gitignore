@@ -1,0 +1,8 @@
+
+# Secretos - nunca versionar
+.env
+.env.*
+!.env.example
+*firebase*adminsdk*.json
+firebase-config.json
+node_modules/
