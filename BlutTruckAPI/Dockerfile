@@ -1,5 +1,5 @@
 # 1) Build stage: compila tu solución
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
 # Copiamos el .sln y el csproj a un lugar temporario
