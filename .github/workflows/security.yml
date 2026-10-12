@@ -28,7 +28,7 @@ jobs:
           - language: python
             build-mode: none
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-dotnet@v4
         if: matrix.language == 'csharp'
         with:
@@ -44,7 +44,7 @@ jobs:
     name: Gitleaks (secret scanning)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - name: Run gitleaks
@@ -55,7 +55,7 @@ jobs:
     name: Trivy (dependencias y configuración)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       # Informativo: muestra HIGH/CRITICAL con parche disponible.
       - name: Trivy filesystem scan
         run: |
@@ -72,7 +72,7 @@ jobs:
           - { name: ia, context: IA_Predictiva }
           - { name: front, context: blutTruck-Front }
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: docker build -t bluttruck-${{ matrix.name }}:ci ${{ matrix.context }}
       - name: Trivy image scan
         run: |
